@@ -6,6 +6,7 @@ import { useNews } from "./context/newsContext";
 
 function App() {
   // had no time but this should not be passed as props since it has the context
+  // auto reload on scroll can be implemented through skip and limit in the server
   const { news } = useNews();
 
   return (
