@@ -6,12 +6,12 @@ import { useNews } from "./context/newsContext";
 
 function App() {
   // had no time but this should not be passed as props since it has the context
-  const { news, setNews, originalNews } = useNews();
+  const { news } = useNews();
 
   return (
     <div className="container mt-5">
       <div className="app-container">
-        <Search news={news} setNews={setNews} originalNews={originalNews} />
+        <Search />
         <div className="scrollable-container">
           {news && news.data.map((x) => <Cards key={x._id} news={x} />)}
         </div>

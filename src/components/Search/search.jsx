@@ -1,20 +1,16 @@
+import { useNews } from "../../context/newsContext";
 import useSearch from "../../hooks/useSearch";
-import PropTypes from "prop-types";
 
-Search.propTypes = {
-  setNews: PropTypes.func,
-  news: PropTypes.any,
-  originalNews: PropTypes.any,
-};
-export default function Search({ news, setNews, originalNews }) {
+export default function Search() {
   const { input, setInput } = useSearch();
+  const { news, setNews, originalNewsRef } = useNews();
 
   function handleChange(text) {
     setInput(text);
 
     if (text == "") {
-      setNews(originalNews);
-      console.log("text is empty");
+      setNews(originalNewsRef.current);
+      return;
     }
 
     if (!Array.isArray(news.data)) {
@@ -32,13 +28,12 @@ export default function Search({ news, setNews, originalNews }) {
   function clearInput() {
     setInput("");
 
-    // Ensure news.data is valid before resetting
-    if (!Array.isArray(originalNews)) {
+    if (!Array.isArray(originalNewsRef.current.data)) {
       console.error("Invalid data: news.data is not an array");
       return;
     }
 
-    setNews({ ...news, data: originalNews });
+    setNews(originalNewsRef.current);
   }
 
   return (

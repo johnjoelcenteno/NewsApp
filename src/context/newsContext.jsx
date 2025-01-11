@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState, useRef } from "react";
 import { getAllNews } from "../services/news";
 import PropTypes from "prop-types";
 
@@ -8,18 +8,22 @@ const NewsContext = createContext();
 NewsProvider.propTypes = { children: PropTypes.node };
 export function NewsProvider({ children }) {
   const [news, setNews] = useState();
-  const originalNews = news;
+  const originalNewsRef = useRef();
 
   useEffect(() => {
     async function fetchNews() {
       const allNews = await getAllNews();
       setNews(allNews);
+
+      // Store the fetched news in the ref only once
+      if (!originalNewsRef.current) {
+        originalNewsRef.current = allNews;
+      }
     }
     fetchNews();
   }, []);
-
   return (
-    <NewsContext.Provider value={{ news, setNews, originalNews }}>
+    <NewsContext.Provider value={{ news, setNews, originalNewsRef }}>
       {children}
     </NewsContext.Provider>
   );
